@@ -457,23 +457,26 @@ function strength(w){var r=S.words[key(w)];return r?r.s:0}
 function unitLv(l){return Math.min(LEVELS,(S.units[l]||0))}
 function weakWords(){return V.filter(function(w){var r=S.words[key(w)];return r&&r.m>0}).sort(function(a,b){return S.words[key(b)].m-S.words[key(a)].m})}
 /* ---------- speech ---------- */
-var koVoice=null,TTS=false,ALLV=[];
+var koVoice=null,TTS=false,ALLV=[],APPROX=false;
+function kzRu(s){var M={'ә':'э','Ә':'Э','ғ':'г','Ғ':'Г','қ':'к','Қ':'К','ң':'нг','Ң':'Нг','ө':'о','Ө':'О','ұ':'у','Ұ':'У','ү':'ю','Ү':'Ю','һ':'х','Һ':'Х','і':'и','І':'И'};return String(s).replace(/[әғқңөұүһіӘҒҚҢӨҰҮҺІ]/g,function(c){return M[c]})}
+function ttxt(t){return APPROX?kzRu(t):t}
 try{TTS=('speechSynthesis' in window)&&typeof SpeechSynthesisUtterance!=='undefined'}catch(e){TTS=false}
 function ttsKey(){return LN('ttsLang','ttsLangKz','ttsLangEn')}
 function isMyVoice(v){return EN()?(/^en/i.test(v.lang)||/english/i.test(v.name)):KZ()?(/^kk/i.test(v.lang)||/kazakh|қазақ/i.test(v.name)):(/^ko/i.test(v.lang)||/korean|한국/i.test(v.name))}
 function ttsForced(){try{return localStorage.getItem(ttsKey())==='1'}catch(e){return false}}
 function pickVoice(){var prev=!!koVoice;try{ALLV=TTS?speechSynthesis.getVoices():[];var v=(EN()&&ALLV.find(function(x){return /^en[-_](US|GB)/i.test(x.lang)}))||ALLV.find(isMyVoice)||null;
+  APPROX=false;if(!v&&KZ()&&TTS&&!ttsForced()){v=ALLV.find(function(x){return /^ru/i.test(x.lang)})||null;APPROX=!!v}
   koVoice=v||(TTS&&ttsForced()?{lang:LN('ko-KR','kk-KZ','en-US'),fake:true,name:'системный (по языку)'}:null)}catch(e){koVoice=null}
   if(prev!==!!koVoice&&view==='home')home()}
 try{pickVoice();if(TTS){speechSynthesis.onvoiceschanged=pickVoice;[400,1200,3000,6000].forEach(function(t){setTimeout(pickVoice,t)})}}catch(e){}
-function speakRaw(t,r,v){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);if(v&&!v.fake)u.voice=v;u.lang=v&&v.lang?v.lang:LN('ko-KR','kk-KZ','en-US');u.rate=r||.85;speechSynthesis.speak(u);return true}catch(e){return false}}
+function speakRaw(t,r,v){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(v===koVoice?ttxt(t):t);if(v&&!v.fake)u.voice=v;u.lang=v&&v.lang?v.lang:LN('ko-KR','kk-KZ','en-US');u.rate=r||.85;speechSynthesis.speak(u);return true}catch(e){return false}}
 function ttsPanel(){
   var kos=ALLV.filter(isMyVoice), LNAME=LN('Корейский','Казахский','Английский'), lw=LN('по-корейски','по-казахски','по-английски'), PH=LN('안녕하세요','Сәлеметсіз бе','Hello! How are you?'), lc=LN('ko-KR','kk-KZ','en-US');
   var st=!TTS?'<p class="tst bad">Это окно вообще не умеет озвучивать текст.</p><p>Так бывает, когда тренажёр открыт внутри приложения Claude. Открой ту же ссылку в <b>Chrome</b>: в приложении нажми «Поделиться» → «Копировать ссылку» и вставь её в адресную строку Chrome.</p>'
    :kos.length?'<p class="tst ok">'+LNAME+' голос найден: '+esc(kos[0].name)+'</p>'
    :'<p class="tst bad">Озвучка есть, но '+LN('корейского','казахского','английского')+' голоса браузер не видит.</p><p>Всего голосов: '+ALLV.length+'. Нажми «Проверить звук»: иногда Chrome на Android всё равно говорит '+lw+', просто не показывает голос в списке.</p>'+(KZ()?'<p>Казахский голос есть не на всех телефонах. Если его нет, тренажёр всё равно работает, просто без заданий на слух.</p>':'');
   var o=document.createElement('div');o.className='overlay';
-  o.innerHTML='<div class="sheet"><div class="sheet-in"><h2 class="rt">Озвучка</h2>'+st+(TTS?'<button class="main-btn" id="tTest">Проверить звук</button><div id="tAsk" hidden><p>Слышно «'+PH+'» '+lw+'?</p><div class="actions"><button class="act" id="tYes"><b>Да, слышно</b></button><button class="act" id="tNo"><b>Нет / не '+lw+'</b></button></div></div><div id="tHelp" hidden class="thelp"><b>Что ещё проверить</b><ol><li>Открыт ли тренажёр в <b>Chrome</b>, а не внутри приложения Claude.</li><li>Settings → Text-to-speech output → Preferred engine: <b>Speech Services by Google</b> (не Samsung).</li><li>Там же ⚙️ → Install voice data → <b>'+LN('Korean','Kazakh','English')+'</b> скачан полностью'+(KZ()?' (если Kazakh в списке нет, значит, на этом телефоне казахского голоса пока нет)':'')+'.</li><li>Громкость мультимедиа не на нуле, режим «Не беспокоить» выключен.</li><li>Перезапусти Chrome полностью (смахни его из недавних приложений).</li></ol></div>':'')+
+  o.innerHTML='<div class="sheet"><div class="sheet-in"><h2 class="rt">Озвучка</h2>'+(APPROX?'<p class="tst ok">Сейчас работает русский голос.</p><p>Казахского голоса в Google нет, поэтому тренажёр читает казахские слова русским голосом и заменяет особые буквы: қ→к, ғ→г, ң→нг, ө→о, ұ→у, ү→ю, і→и, ә→э. Звучит примерно, но слова и ритм фразы слышно. Правильное произношение особых букв смотри в шпаргалке.</p>':'')+st+(TTS?'<button class="main-btn" id="tTest">Проверить звук</button><div id="tAsk" hidden><p>Слышно «'+PH+'» '+lw+'?</p><div class="actions"><button class="act" id="tYes"><b>Да, слышно</b></button><button class="act" id="tNo"><b>Нет / не '+lw+'</b></button></div></div><div id="tHelp" hidden class="thelp"><b>Что ещё проверить</b><ol><li>Открыт ли тренажёр в <b>Chrome</b>, а не внутри приложения Claude.</li><li>Settings → Text-to-speech output → Preferred engine: <b>Speech Services by Google</b> (не Samsung).</li><li>Там же ⚙️ → Install voice data → <b>'+LN('Korean','Kazakh','English')+'</b> скачан полностью'+(KZ()?' (если Kazakh в списке нет, значит, на этом телефоне казахского голоса пока нет)':'')+'.</li><li>Громкость мультимедиа не на нуле, режим «Не беспокоить» выключен.</li><li>Перезапусти Chrome полностью (смахни его из недавних приложений).</li></ol></div>':'')+
    '<p class="tdiag">Браузер: '+(TTS?'озвучка поддерживается':'без озвучки')+' · голосов: '+ALLV.length+' · '+LN('корейских','казахских','английских')+': '+kos.length+'</p></div><button class="main-btn ghost" id="tClose">Закрыть</button></div>';
   document.body.appendChild(o);
   function close(){o.remove();home()}
@@ -509,7 +512,7 @@ function home(){
   THEMES.forEach(function(t){var lv=unitLv(t.l),bars='';for(var i=0;i<LEVELS;i++)bars+='<i class="'+(i<lv?'on':'')+'"></i>';
     h+='<button class="unit" data-l="'+esc(t.l)+'"><span class="node '+(lv>=LEVELS?'done':lv===0?'new':'')+'">'+esc(t.s)+'</span><span class="info"><span class="name">'+esc(t.l)+'</span>'+(nextU&&nextU.l===t.l?'<span class="next-badge">дальше</span>':'')+
     '<span class="lv">'+bars+'<small>'+(lv>=LEVELS?'пройдено, можно повторять':'урок '+(lv+1)+' из '+LEVELS)+'</small></span></span></button>'});
-  h+='</div><div class="foot">'+V.length+' слов в '+THEMES.length+' темах'+'<br><button class="tlink" id="ttsBtn">'+(koVoice?'🔊 Озвучка включена · проверить':'🔇 Озвучка недоступна · разобраться')+'</button></div></div>';
+  h+='</div><div class="foot">'+V.length+' слов в '+THEMES.length+' темах'+'<br><button class="tlink" id="ttsBtn">'+(koVoice?(APPROX?'🔊 Озвучка примерная: русский голос · подробнее':'🔊 Озвучка включена · проверить'):'🔇 Озвучка недоступна · разобраться')+'</button></div></div>';
   } else if(TAB==='g'){
   var nextG=G.find(function(g){return !(S.gram[g.id]>0)});
   h+='<div class="actions one"><button class="act" id="gNext"><b>'+(nextG?'Следующее правило':'Случайное правило')+'</b><small>'+(nextG?esc(nextG.t):'Все правила пройдены, повторяй любое')+'</small></button></div><div class="path">';
@@ -920,7 +923,7 @@ function inject(tasks,l,lv){
 /* ---------- reading & listening ---------- */
 function sayAll(list,rate,onIdx,onEnd){
   if(!koVoice){if(onEnd)onEnd();return}
-  try{speechSynthesis.cancel();list.forEach(function(t,i){var u=new SpeechSynthesisUtterance(t.replace(/"/g,''));if(!koVoice.fake)u.voice=koVoice;u.lang=koVoice.lang||'ko-KR';u.rate=rate||.85;
+  try{speechSynthesis.cancel();list.forEach(function(t,i){var u=new SpeechSynthesisUtterance(ttxt(t.replace(/"/g,'')));if(!koVoice.fake)u.voice=koVoice;u.lang=koVoice.lang||'ko-KR';u.rate=rate||.85;
     u.onstart=function(){if(onIdx)onIdx(i)};if(i===list.length-1)u.onend=function(){if(onEnd)onEnd()};speechSynthesis.speak(u)})}catch(e){if(onEnd)onEnd()}
 }
 function stopSpeech(){try{speechSynthesis.cancel()}catch(e){}}
