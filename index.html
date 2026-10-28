@@ -465,7 +465,7 @@ function ttsKey(){return LN('ttsLang','ttsLangKz','ttsLangEn')}
 function isMyVoice(v){return EN()?(/^en/i.test(v.lang)||/english/i.test(v.name)):KZ()?(/^kk/i.test(v.lang)||/kazakh|қазақ/i.test(v.name)):(/^ko/i.test(v.lang)||/korean|한국/i.test(v.name))}
 function ttsForced(){try{return localStorage.getItem(ttsKey())==='1'}catch(e){return false}}
 function pickVoice(){var prev=!!koVoice;try{ALLV=TTS?speechSynthesis.getVoices():[];var v=(EN()&&ALLV.find(function(x){return /^en[-_](US|GB)/i.test(x.lang)}))||ALLV.find(isMyVoice)||null;
-  APPROX=false;if(!v&&KZ()&&TTS&&!ttsForced()){v=ALLV.find(function(x){return /^ru/i.test(x.lang)})||null;APPROX=!!v}
+  APPROX=false;if(!v&&KZ()&&TTS){v=ALLV.find(function(x){return /^ru/i.test(x.lang)})||{lang:'ru-RU',fake:true,name:'русский (системный)'};APPROX=true}
   koVoice=v||(TTS&&ttsForced()?{lang:LN('ko-KR','kk-KZ','en-US'),fake:true,name:'системный (по языку)'}:null)}catch(e){koVoice=null}
   if(prev!==!!koVoice&&view==='home')home()}
 try{pickVoice();if(TTS){speechSynthesis.onvoiceschanged=pickVoice;[400,1200,3000,6000].forEach(function(t){setTimeout(pickVoice,t)})}}catch(e){}
