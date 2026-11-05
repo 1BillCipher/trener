@@ -215,6 +215,41 @@ small.les{color:var(--seal)!important;font-weight:600;margin-left:0!important}
 .langsw button{border:0;background:none;border-radius:9px;padding:8px 4px;font-weight:600;cursor:pointer;color:var(--muted);font-size:14px}
 .langsw button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .kz .av{font-size:11px}
+/* flashcards + new tasks */
+.tabsw{display:flex!important;gap:2px}
+.tabsw button{flex:1 1 auto;padding:9px 5px!important;font-size:13.5px!important;white-space:nowrap}
+.fcdir{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:10px}
+.fcdir button{border:0;background:none;border-radius:9px;padding:8px 4px;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted)}
+.fcdir button[aria-pressed="true"]{background:var(--celadon-soft);color:var(--celadon)}
+.decks{display:grid;gap:8px;padding-bottom:16px}
+.deck{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 14px;cursor:pointer;width:100%;color:var(--ink)}
+.deck:hover{border-color:var(--celadon)}
+.deck .dn{font-weight:600;min-width:0}
+.deck .dm{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.deck .dbar{grid-column:1/-1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.deck .dbar i{display:block;height:100%;background:var(--celadon);border-radius:3px}
+.fct{align-items:center;gap:14px}
+.fct-t{margin:0;color:var(--muted);font-weight:600;font-size:14px;text-align:center}
+.fcc{font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;min-width:52px;text-align:right}
+.fcard{position:relative;width:100%;max-width:440px;height:min(48vh,330px);min-height:240px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px 18px 40px;border-radius:22px;border:2px solid var(--line);border-bottom-width:6px;background:var(--paper);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .45s ease;text-align:center}
+.backf{transform:rotateY(180deg);border-color:var(--celadon);background:var(--celadon-soft)}
+.fcard.on .front{transform:rotateY(-180deg)}
+.fcard.on .backf{transform:rotateY(0deg)}
+.fcw{font:700 40px/1.2 var(--f-disp);color:var(--celadon);overflow-wrap:anywhere;word-break:keep-all}
+.fcw.long{font-size:28px}
+.fcw.ru{font:600 27px/1.3 var(--f-body);color:var(--ink)}
+.backf .fcw{font-size:30px}.backf .fcw.long{font-size:24px}
+.fcru{font:600 21px/1.35 var(--f-body);color:var(--ink)}
+.fce{font-size:46px;line-height:1}
+.fch{position:absolute;bottom:14px;left:12px;right:12px;color:var(--muted);font-size:13px}
+.fcspk{min-height:48px}
+.mgap{display:inline-block;min-width:.75em;text-align:center;color:var(--seal);background:var(--seal-soft);border-radius:6px;padding:0 4px;margin:0 1px}
+.tfru{margin:0;font:600 22px/1.3 var(--f-body)}
+@media (prefers-reduced-motion:reduce){.face{transition:none}}
+.hlw{color:var(--celadon);border-bottom:3px solid var(--celadon);padding:0 2px}
+.opt.ko.ls{font-size:17px;font-weight:600}
+.prompt .sent{flex:1;min-width:0}
 /* English mode: indigo accent */
 :root.en{--celadon:#4453A8;--celadon-dk:#323E82;--celadon-soft:#E6E9F7;--f-disp:"Noto Serif",Georgia,serif;--f-body:"Noto Sans","IBM Plex Sans",system-ui,sans-serif;--f-ko:"Noto Sans","IBM Plex Sans",system-ui,sans-serif}
 @media (prefers-color-scheme:dark){:root.en:not([data-theme="light"]){--celadon:#8F9DF0;--celadon-dk:#6472C4;--celadon-soft:#1E2340}}
@@ -504,7 +539,7 @@ function home(){
    '<span class="stat fire" title="Дней подряд">'+ICON.fire+st+'</span><span class="stat xp" title="Опыт">'+ICON.star+S.xp+'</span></div></div>'+
    langSw()+'<div class="goal"><svg class="ring" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="var(--line)" stroke-width="6"/><circle cx="24" cy="24" r="20" fill="none" stroke="var(--celadon)" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+(C*pct)+' '+C+'" transform="rotate(-90 24 24)"/></svg>'+
    '<div><div class="t">'+(pct>=1?'Цель на сегодня выполнена!':'Цель дня: '+todayXp+' из '+GOAL_XP+' XP')+'</div><div class="s">'+(pct>=1?'Серия продлена. Можно ещё потренироваться.':'Это примерно 3 урока. Серия: '+st+' '+plural(st,'день','дня','дней')+'.')+'</div></div></div>'+
-   '<div class="tabsw" role="tablist"><button role="tab" data-tab="w" aria-selected="'+(TAB==='w')+'">Слова</button><button role="tab" data-tab="g" aria-selected="'+(TAB==='g')+'">Грамматика</button><button role="tab" data-tab="r" aria-selected="'+(TAB==='r')+'">Чтение</button><button role="tab" data-tab="l" aria-selected="'+(TAB==='l')+'">Слух</button></div>';
+   '<div class="tabsw" role="tablist"><button role="tab" data-tab="w" aria-selected="'+(TAB==='w')+'">Слова</button><button role="tab" data-tab="f" aria-selected="'+(TAB==='f')+'">Карточки</button><button role="tab" data-tab="g" aria-selected="'+(TAB==='g')+'">Грамматика</button><button role="tab" data-tab="r" aria-selected="'+(TAB==='r')+'">Чтение</button><button role="tab" data-tab="l" aria-selected="'+(TAB==='l')+'">Слух</button></div>';
   if(TAB==='w'){
   h+='<div class="actions"><button class="act" id="aNext"><b>'+(nextU?'Продолжить':'Повторить всё')+'</b><small>'+(nextU?esc(nextU.l):'Все темы пройдены')+'</small></button>'+
    '<button class="act" id="aWeak" '+(weak.length<4?'disabled':'')+'><b>Работа над ошибками</b><small>'+(weak.length<4?'Пока ошибок мало':weak.length+' '+plural(weak.length,'слово','слова','слов'))+'</small></button><button class="act wide" id="aBlitz"><b>Блиц · 60 секунд</b><small>'+(S.blitzBest?'Рекорд: '+S.blitzBest:'Верно или неверно, на скорость')+'</small></button></div>'+
@@ -520,7 +555,7 @@ function home(){
     h+='<button class="unit gunit" data-g="'+g.id+'"><span class="node '+(n>=2?'done':n===0?'new':'')+'">'+esc(g.s)+'</span><span class="info"><span class="name ko">'+esc(g.t)+'</span>'+(nextG&&nextG.id===g.id?'<span class="next-badge">дальше</span>':'')+
     '<span class="gsub">'+esc(g.ru)+'</span><span class="lv"><small class="les">'+esc(g.les)+'</small><small>'+(n===0?'не пройдено':'пройдено '+n+' '+plural(n,'раз','раза','раз'))+'</small></span></span></button>'});
   h+='</div><div class="foot">'+G.length+LN(' правил из уроков 1–15',' правил уровня А1',' правил B1+ → B2')+'</div></div>';
-  } else if(TAB==='r'){h+=homeR()} else {h+=homeL()}
+  } else if(TAB==='f'){h+=homeF()} else if(TAB==='r'){h+=homeR()} else {h+=homeL()}
   app.innerHTML=h;window.scrollTo(0,0);wireLang();
   var tb=document.getElementById('ttsBtn');if(tb)tb.onclick=ttsPanel;
   app.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){TAB=b.dataset.tab;try{localStorage.setItem('htab',TAB)}catch(e){}home()}});
@@ -532,7 +567,7 @@ function home(){
   } else if(TAB==='g'){
   document.getElementById('gNext').onclick=function(){gIntro(nextG||G[Math.floor(Math.random()*G.length)])};
   app.querySelectorAll('.gunit').forEach(function(b){b.onclick=function(){gIntro(G.find(function(g){return g.id===b.dataset.g}))}});
-  } else wireRL();
+  } else if(TAB==='f'){wireF()} else wireRL();
 }
 /* ---------- grammar ---------- */
 function ruleHtml(g){
@@ -548,11 +583,14 @@ function gIntro(g){
   document.getElementById('go').onclick=function(){startGram(g)};
 }
 function startGram(g){
-  var t=[];
-  shuffle(g.fill).forEach(function(f){t.push({t:'gfill',f:f})});
-  (g.id==='g20'?[]:EN()?shuffle(g.err||[]).map(errFromEn):shuffle(g.tr).map(KZ()?errFromKz:errFrom).filter(Boolean).slice(0,2)).forEach(function(e){t.push({t:'gerr',e:e})});
-  shuffle(g.form).slice(0,3).forEach(function(f){t.push({t:'gform',f:f,g:g})});
-  shuffle(g.tr).forEach(function(f){t.push({t:'gtr',f:f})});
+  var fills=shuffle(g.fill),t=[],mid=[];
+  fills.slice(0,3).forEach(function(f){t.push({t:'gfill',f:f})});
+  mid.push({t:'gtf',f:fills[3]||fills[0]});
+  (g.id==='g20'?[]:EN()?shuffle(g.err||[]).map(errFromEn):shuffle(g.tr).map(KZ()?errFromKz:errFrom)).filter(Boolean).slice(0,2).forEach(function(e){mid.push({t:'gerr',e:e})});
+  shuffle(g.form).slice(0,2).forEach(function(f){mid.push({t:'gform',f:f,g:g})});
+  var ss=shuffle(gSents(g));if(ss[0])mid.push({t:'gex',g:g,s:ss[0],rev:false});if(ss[1])mid.push({t:'gex',g:g,s:ss[1],rev:true});
+  t=t.concat(shuffle(mid));
+  shuffle(g.tr).slice(0,3).forEach(function(f){t.push({t:'gtr',f:f})});
   runLesson({unit:null,lv:0,tasks:t,gram:g});
 }
 function tFill(T){
@@ -607,18 +645,20 @@ function plural(n,a,b,c){n=Math.abs(n)%100;var m=n%10;if(n>10&&n<20)return c;if(
 function buildTasks(words,pool,lv){
   // words: focus words for this lesson
   var tasks=[], ws=shuffle(words);
-  var types=lv===0?['ko2ru','pic','ru2ko','pairs','jamo','ko2ru','odd','listen','build','pic']
-          :lv===1?['pic','ru2ko','jamo','listen','pairs','odd','type','build','dict','ru2ko']
-                 :['build','type','dict','odd','jamo','ru2ko','pairs','pic','type','dict'];
+  var types=mixTypes(lv===0?['ko2ru','pic','ru2ko','pairs','jamo','tf','odd','listen','build','miss','hear','pic']
+          :lv===1?['pic','ru2ko','jamo','listen','pairs','odd','type','build','dict','tf','miss','hear']
+                 :['build','type','dict','odd','jamo','ru2ko','pairs','pic','tf','dict','miss','hear'],lv);
   var i=0;
   types.forEach(function(tp){
     if(tp==='jamo'&&LANG!=='ko')tp='build';
     if(tp==='listen'&&!koVoice)tp='ru2ko';
     if(tp==='dict'&&!koVoice)tp='build';
+    if(tp==='hear'&&!koVoice)tp='tf';
     if(tp==='pairs'){tasks.push({t:'pairs',items:shuffle(ws).slice(0,5)});return}
     var w=ws[i%ws.length];i++;
     function need(f,fb){if(f(w))return;var alt=ws.find(f);if(alt)w=alt;else tp=fb}
     if(tp==='pic')need(function(x){return !!emo(x)},'ko2ru');
+    if(tp==='miss')need(okMiss,'tf');
     if(tp==='jamo')need(function(x){return hangulOnly(x.ko)&&x.ko.indexOf(' ')<0&&x.ko.length<=3},'build');
     if(tp==='build'||tp==='type'||tp==='dict')need(function(x){return hangulOnly(x.ko)},'ru2ko');
     tasks.push({t:tp,w:w,pool:pool});
@@ -630,7 +670,9 @@ function start(l){
   var all=wordsOf(l), lv=Math.min(unitLv(l),LEVELS-1);
   var picked=all.slice().sort(function(a,b){return strength(a)-strength(b)||Math.random()-.5}).slice(0,8);
   if(unitLv(l)<LEVELS){var chunk=all.slice(lv*7,lv*7+7);picked=shuffle(chunk.concat(shuffle(all.filter(function(w){return chunk.indexOf(w)<0})).slice(0,3)))}
-  runLesson({unit:l,lv:lv,tasks:inject(buildTasks(picked,all,lv),l,lv)});
+  var tasks=inject(buildTasks(picked,all,lv),l,lv);
+  if(DIALOGS&&DIALOGS.length&&!tasks.some(function(t){return t.t==='dialog'})&&Math.random()<.75){var pos=4+rnd(5);if(tasks[pos]&&tasks[pos].t!=='pairs'&&tasks[pos].t!=='num')tasks[pos]={t:'dialog',d:pick(DIALOGS)}}
+  runLesson({unit:l,lv:lv,tasks:tasks});
 }
 function startWeak(){var ws=weakWords().slice(0,8);runLesson({unit:null,lv:1,tasks:buildTasks(ws,V,1)})}
 function runLesson(o){L={unit:o.unit,lv:o.lv,gram:o.gram||null,text:o.text||null,mode:o.mode||null,drill:o.drill||null,tasks:o.tasks,i:0,hearts:5,correct:0,total:0,mist:[],start:Date.now()};view='lesson';task()}
@@ -649,7 +691,7 @@ function wireSpk(){app.querySelectorAll('[data-say]').forEach(function(b){b.oncl
 function task(){
   if(L.i>=L.tasks.length||L.hearts<=0)return finish();
   var T=L.tasks[L.i];
-  ({ko2ru:tChoice,ru2ko:tChoice,listen:tChoice,pairs:tPairs,build:tBuild,type:tType,gfill:tFill,gform:tForm,gtr:tTr,pic:tPic,jamo:tJamo,dict:tDict,odd:tOdd,dialog:tDialog,num:tNum,gerr:tErr,rq:tRq,rtf:tRtf,rtr:tRtr,rbuild:tRbuild,lq:tRq,lmean:tLmean,ldict:tLdict,mp:tMp,ne:tNe,lwm:tLwm})[T.t](T);
+  ({ko2ru:tChoice,ru2ko:tChoice,listen:tChoice,pairs:tPairs,build:tBuild,type:tType,gfill:tFill,gform:tForm,gtr:tTr,pic:tPic,jamo:tJamo,dict:tDict,odd:tOdd,dialog:tDialog,num:tNum,gerr:tErr,rq:tRq,rtf:tRtf,rtr:tRtr,rbuild:tRbuild,lq:tRq,lmean:tLmean,ldict:tLdict,mp:tMp,ne:tNe,lwm:tLwm,tf:tTf,miss:tMiss,hear:tHear,gtf:tGtf,gex:tGex})[T.t](T);
   wireSpk();
 }
 function feedback(ok,correctText,note){
@@ -1893,6 +1935,350 @@ ETX.push(
  q:[["What does every new worker start with?","A safety briefing",["A medical exam","A driving test"]],["What must people working at height wear?","A harness",["Goggles","Ear protection"]],["What happened last month?","A worker tripped over a cable",["There was a fire","A crane broke down"]],["Why should near misses be reported?","To prevent real accidents",["To punish workers","To save money"]]],
  tf:[["The safety briefing takes about a day.","Инструктаж длится около дня.",false],["The worker was badly hurt.","Рабочий сильно пострадал.",false],["The cables were fenced off.","Кабели огородили.",true]]});
 })();
+/* ---------- more dialogs (all languages) ---------- */
+(function(){
+DIALOGS.push(
+ ['오늘 날씨가 어때요?','Какая сегодня погода?',['추워요. 눈이 와요.','Холодно. Идёт снег.'],['오늘은 월요일이에요.','저는 날씨예요.']],
+ ['주말에 뭐 했어요?','Что делал на выходных?',['친구하고 영화를 봤어요.','Смотрел фильм с другом.'],['내일 영화를 볼 거예요.','주말이 좋아요?']],
+ ['어디가 아파요?','Что болит?',['머리가 아파요.','Болит голова.'],['병원이 커요.','아니요, 의사예요.']],
+ ['같이 점심 먹을까요?','Пообедаем вместе?',['네, 좋아요. 뭐 먹을까요?','Давай. Что поедим?'],['점심이 맛있었어요.','저는 점심이에요.']],
+ ['화장실이 어디에 있어요?','Где туалет?',['저기 왼쪽에 있어요.','Вон там, слева.'],['화장실에 가고 싶어요.','네, 화장실이에요.']],
+ ['이것 좀 도와 주세요.','Помогите, пожалуйста, с этим.',['네, 제가 도와 줄게요.','Да, я помогу.'],['네, 도와 주세요.','또 만나요!']],
+ ['안전모를 썼어요?','Ты надел каску?',['네, 썼어요.','Да, надел.'],['네, 안전모예요.','안전모를 살 거예요?']],
+ ['측량이 끝났어요?','Съёмка закончилась?',['아니요, 아직 안 끝났어요.','Нет, ещё не закончилась.'],['네, 측량사예요.','측량을 좋아해요?']],
+ ['몇 시에 일이 끝나요?','Во сколько заканчивается работа?',['여섯 시에 끝나요.','В шесть часов.'],['육 시에 끝나요.','여섯 개 끝나요.']],
+ ['생일이 언제예요?','Когда твой день рождения?',['삼월 십오 일이에요.','Пятнадцатого марта.'],['세 월 열다섯 일이에요.','생일 축하해요!']],
+ ['한국 음식을 먹어 봤어요?','Пробовал корейскую еду?',['네, 비빔밥을 먹어 봤어요.','Да, пробовал пибимпап.'],['네, 먹어 볼까요?','아니요, 맛있어요.']],
+ ['내일 뭐 할 거예요?','Что будешь делать завтра?',['회사에 일하러 갈 거예요.','Пойду на работу.'],['어제 회사에 갔어요.','내일이에요.']],
+ ['조심하세요! 바닥이 미끄러워요.','Осторожно! Пол скользкий.',['네, 감사합니다.','Да, спасибо.'],['바닥을 좋아해요.','네, 미끄러워요?']],
+ ['여기에서 담배를 피워도 돼요?','Здесь можно курить?',['아니요, 피우면 안 돼요.','Нет, нельзя.'],['네, 담배예요.','아니요, 피워도 돼요?']]
+);
+KDIALOGS.push(
+ ['Бүгін ауа райы қандай?','Какая сегодня погода?',['Суық, қар жауып тұр.','Холодно, идёт снег.'],['Бүгін сенбі.','Мен суықпын.']],
+ ['Қайда жұмыс істейсіз?','Где вы работаете?',['Құрылыста жұмыс істеймін.','Работаю на стройке.'],['Ертең жұмысқа барамын.','Жұмысым жақсы.']],
+ ['Дулығаң қайда?','Где твоя каска?',['Көліктің ішінде.','В машине.'],['Дулыға жаңа.','Иә, дулыға.']],
+ ['Қайда тұрасыз?','Где вы живёте?',['Алматыда тұрамын.','Живу в Алматы.'],['Алматыдан келдім.','Алматыға барамын.']],
+ ['Кеше не істедіңіз?','Что вы делали вчера?',['Кітап оқыдым.','Читал книгу.'],['Ертең кітап оқимын.','Кітап оқып жатырмын.']],
+ ['Ертең не істейсіз?','Что будете делать завтра?',['Жұмысқа барамын.','Пойду на работу.'],['Жұмысқа бардым.','Кеше жұмыс істедім.']],
+ ['Абай болыңыз! Жер тайғақ.','Осторожно! Земля скользкая.',['Рахмет, түсіндім.','Спасибо, понял.'],['Тайғақ па? Сау болыңыз.','Жер үлкен.']],
+ ['Дәріхана қайда?','Где аптека?',['Банктің жанында.','Рядом с банком.'],['Дәріхана жақсы.','Дәрі ішемін.']],
+ ['Не ішесіз? Шай ма, кофе ме?','Что будете пить? Чай или кофе?',['Кофе, рахмет.','Кофе, спасибо.'],['Шай ішті.','Иә, ішемін.']],
+ ['Сізде қалам бар ма?','У вас есть ручка?',['Иә, бар. Мінеки.','Да, есть. Вот.'],['Иә, қаламмын.','Жоқ, қалам емеспін.']]
+);
+EDIALOGS.push(
+ ['Could you check the levels again?','Не мог бы ты ещё раз проверить отметки?',["Sure, I'll do it right after lunch.",'Конечно, сделаю сразу после обеда.'],['Sure, I checked it tomorrow.','Yes, I could check yesterday.']],
+ ['Have you signed the act yet?','Ты уже подписал акт?',["Not yet, I'm waiting for the inspector.",'Ещё нет, жду инспектора.'],["Not yet, I'm waiting the inspector.",'Yes, I signed it tomorrow.']],
+ ['Where is your hard hat?','Где твоя каска?',["Sorry, I left it in the car. I'll get it.",'Извини, оставил в машине. Сейчас принесу.'],["Sorry, I've left it in the car yesterday.","It's in my car, isn't it?"]],
+ ['What do you think about the new schedule?','Что думаешь о новом графике?',["To be honest, it's a bit tight.",'Честно говоря, он немного напряжённый.'],["I'm thinking it's tight.","To be honest, it's a bit tightly."]],
+ ["I'm sorry, but I can't make it to the meeting.",'Извини, не смогу прийти на совещание.',["No problem. I'll send you the notes.",'Без проблем. Пришлю тебе заметки.'],['Congratulations!',"No problem. I'll sent you the notes."]],
+ ['How was your weekend?','Как прошли выходные?',['Great, thanks! We went to the mountains.','Отлично, спасибо! Ездили в горы.'],['Great, thanks! We go to the mountains.','It was on Saturday.']],
+ ['Could you speak a bit more slowly, please?','Не могли бы вы говорить чуть медленнее?',['Of course. Sorry about that.','Конечно. Извините.'],['Of course, I speak slowly.','Yes, I could.']],
+ ['Shall I order a taxi for you?','Заказать тебе такси?',['That would be great, thanks.','Было бы здорово, спасибо.'],['That will be great, thank.','Yes, you shall.']],
+ ["What's the weather going to be like tomorrow?",'Какая погода будет завтра?',["They say it's going to rain.",'Говорят, будет дождь.'],['It was raining.',"They say it will raining."]],
+ ['Did anyone get hurt?','Кто-нибудь пострадал?',['No, luckily nobody was injured.','Нет, к счастью, никто не пострадал.'],["No, luckily nobody wasn't injured.",'No, luckily nobody injured.']],
+ ['How long does it take to get to the site?','Сколько ехать до объекта?',['About forty minutes by car.','Минут сорок на машине.'],['About forty minutes with car.','It takes forty kilometres.']],
+ ['Would you like to join us for dinner?','Не хочешь поужинать с нами?',["I'd love to, but I have to work late.",'С удовольствием бы, но мне надо задержаться на работе.'],["I'd love, but I must to work late.",'Yes, I would like.']]
+);
+})();
+
+/* ---------- new word tasks ---------- */
+function tTf(T){
+  var w=T.w;
+  if(T.ok==null){T.ok=Math.random()<.5;if(!T.ok){var d=distractors(w,wordsOf(w.l).filter(function(x){return x!==w}),1,'ru')[0]||distractors(w,T.pool||V,1,'ru')[0];if(d)T.d=d;else T.ok=true}}
+  var shown=T.ok?w.ru:T.d.ru,opts=[true,false];
+  shell('<p class="q-title">Перевод верный?</p><div class="prompt"><span class="word">'+esc(w.ko)+'</span>'+spkBtn(sayText(w))+'</div><p class="tfru">= '+esc(shown)+'</p><div class="opts g2"><button class="opt tfb" data-i="0">Верно</button><button class="opt tfb" data-i="1">Неверно</button></div>');
+  setTimeout(function(){say(sayText(w))},250);
+  wireChoice(opts,function(o){return o===T.ok},function(ok){mark(w,ok);if(!ok)L.mist.push(w);feedback(ok,ok?'':(T.ok?'Верно':'Неверно'),esc(w.ko)+' — '+esc(w.ru))});
+}
+function missPos(w){var idx=[];Array.from(w.ko).forEach(function(c,i){if(LANG==='ko'?/[가-힣]/.test(c):/[a-zа-яёәғқңөұүһі]/i.test(c))idx.push(i)});return idx}
+function okMiss(w){if(/[\/…()+]/.test(w.ko))return false;var n=missPos(w).length;return LANG==='ko'?n>=2:n>=4}
+var KZPAIR={'қ':'кх','к':'қ','ғ':'г','г':'ғ','ң':'н','н':'ң','ө':'оү','о':'ө','ұ':'үу','у':'ұү','ү':'ұө','і':'ыи','ы':'і','и':'ыі','ә':'ае','а':'ә','е':'ә'};
+function tMiss(T){
+  var w=T.w,ch=Array.from(w.ko);
+  if(T.pos==null){
+    var idx=missPos(w);
+    if(KZ()){var sp=idx.filter(function(i){return KZPAIR[ch[i].toLowerCase()]});if(sp.length)idx=sp}
+    if(EN()){var vw=idx.filter(function(i){return /[aeiou]/i.test(ch[i])});if(vw.length&&Math.random()<.7)idx=vw}
+    T.pos=pick(idx);
+    var right=ch[T.pos],low=right.toLowerCase(),cand=[],words={};V.forEach(function(x){words[x.ko.toLowerCase()]=1});
+    function okc(c){if(c===right||cand.indexOf(c)>=0)return false;var t=ch.slice();t[T.pos]=c;return !words[t.join('').toLowerCase()]}
+    if(LANG==='ko'){
+      var pool=[];V.forEach(function(x){Array.from(x.ko).forEach(function(c){if(/[가-힣]/.test(c)&&pool.indexOf(c)<0)pool.push(c)})});
+      var dr=decomp(right);
+      shuffle(pool.filter(function(c){var d=decomp(c);return d[0]===dr[0]||d[1]===dr[1]})).concat(shuffle(pool)).forEach(function(c){if(cand.length<3&&okc(c))cand.push(c)});
+    } else {
+      var pref=(KZ()&&KZPAIR[low]?Array.from(KZPAIR[low]):[]).concat(EN()&&/[aeiou]/.test(low)?shuffle('aeiou'.split('')):[]);
+      var alpha=KZ()?'аәбгғдежзийкқлмнңоөпрстуұүхшыі':'abcdefghiklmnoprstuvwy';
+      pref.concat(shuffle(alpha.split(''))).forEach(function(c){if(right!==low)c=c.toUpperCase();if(cand.length<3&&okc(c))cand.push(c)});
+    }
+    T.opts=shuffle([right].concat(cand));
+  }
+  var R=ch[T.pos],shown=ch.map(function(c,i){return i===T.pos?'<span class="mgap">?</span>':esc(c)}).join('');
+  shell('<p class="q-title">'+(LANG==='ko'?'Какого слога не хватает?':'Какой буквы не хватает?')+'</p><div class="prompt"><span class="word">'+shown+'</span></div><p class="sru">'+esc(w.ru)+'</p><div class="opts g2">'+T.opts.map(function(o,i){return '<button class="opt tfb" data-i="'+i+'">'+esc(o)+'</button>'}).join('')+'</div>');
+  wireChoice(T.opts,function(o){return o===R},function(ok){mark(w,ok);if(!ok)L.mist.push(w);say(sayText(w));
+    app.querySelector('.prompt .word').textContent=w.ko;feedback(ok,ok?'':esc(w.ko),esc(w.ko)+' — '+esc(w.ru))});
+}
+function tHear(T){
+  var w=T.w,opts=T.opts||(T.opts=shuffle([w].concat(distractors(w,T.pool||V,3,'ru'))));
+  shell('<p class="q-title">Послушай и выбери перевод</p><div class="prompt">'+spkBtn(sayText(w),true)+'<button class="skip" id="slow">Медленнее</button></div><div class="opts">'+opts.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o.ru)+'</button>'}).join('')+'</div>');
+  document.getElementById('slow').onclick=function(){say(sayText(w),.55)};
+  setTimeout(function(){say(sayText(w))},250);
+  wireChoice(opts,function(o){return o===w},function(ok){mark(w,ok);if(!ok)L.mist.push(w);feedback(ok,ok?'':esc(w.ru),esc(w.ko)+' — '+esc(w.ru))});
+}
+function mixTypes(base,lv){
+  var easy=['ko2ru','pic','tf'],best=null;
+  for(var a=0;a<40;a++){var t=shuffle(base),bad=0;for(var i=1;i<t.length;i++)if(t[i]===t[i-1])bad++;if(lv===0&&easy.indexOf(t[0])<0)bad++;if(t[0]==='pairs')bad++;if(!best||bad<best.b)best={t:t,b:bad};if(!bad)break}
+  return best.t;
+}
+
+/* ---------- flashcards ---------- */
+var FCDIR='f';try{FCDIR=localStorage.getItem('fcdir')||'f'}catch(e){}
+var FC=null;
+function nLearned(ws){return ws.filter(function(w){return strength(w)>=3}).length}
+function homeF(){
+  var weak=weakWords(),fresh=V.filter(function(w){return !S.words[key(w)]});
+  var h='<div class="fcdir" role="group" aria-label="Сторона карточки"><button data-dir="f" aria-pressed="'+(FCDIR==='f')+'">'+LN('한국어','Қазақша','English')+' → рус</button><button data-dir="r" aria-pressed="'+(FCDIR==='r')+'">Рус → '+LN('한국어','қазақша','English')+'</button></div>'+
+   '<div class="actions"><button class="act wide" id="fAll"><b>Все слова</b><small>'+V.length+' '+plural(V.length,'карточка','карточки','карточек')+' · по 20 за раз, сначала те, что хуже знаешь</small></button>'+
+   '<button class="act" id="fWeak" '+(weak.length?'':'disabled')+'><b>Трудные</b><small>'+(weak.length?weak.length+' '+plural(weak.length,'слово','слова','слов'):'Пока нет')+'</small></button>'+
+   '<button class="act" id="fNew" '+(fresh.length?'':'disabled')+'><b>Новые</b><small>'+(fresh.length?fresh.length+' ещё не '+plural(fresh.length,'встречалось','встречались','встречались'):'Все уже встречались')+'</small></button></div>'+
+   '<div class="sec">По темам</div><div class="decks">';
+  THEMES.forEach(function(t){var ws=wordsOf(t.l),k=nLearned(ws);
+    h+='<button class="deck" data-l="'+esc(t.l)+'"><span class="dn">'+esc(t.l)+'</span><span class="dm">'+k+' / '+ws.length+'</span><span class="dbar"><i style="width:'+Math.round(k/ws.length*100)+'%"></i></span></button>'});
+  return h+'</div><div class="foot">Полоска показывает, сколько слов темы ты уже хорошо знаешь.<br>«Не знаю» отправляет слово в «Работу над ошибками».</div></div>';
+}
+function wireF(){
+  app.querySelectorAll('[data-dir]').forEach(function(b){b.onclick=function(){FCDIR=b.dataset.dir;try{localStorage.setItem('fcdir',FCDIR)}catch(e){}home()}});
+  document.getElementById('fAll').onclick=function(){var ws=V.slice().sort(function(a,b){return strength(a)-strength(b)||Math.random()-.5}).slice(0,20);startFc(shuffle(ws),'Все слова')};
+  document.getElementById('fWeak').onclick=function(){startFc(shuffle(weakWords().slice(0,20)),'Трудные слова')};
+  document.getElementById('fNew').onclick=function(){startFc(shuffle(V.filter(function(w){return !S.words[key(w)]})).slice(0,20),'Новые слова')};
+  app.querySelectorAll('.deck').forEach(function(b){b.onclick=function(){startFc(shuffle(wordsOf(b.dataset.l)),b.dataset.l)}});
+}
+function startFc(words,title){if(!words.length)return;FC={title:title,q:words.slice(),n:words.length,done:0,first:0,again:0,seen:{},miss:[],flip:false,start:Date.now()};view='fc';fcShow()}
+function fcShow(){
+  if(!FC.q.length)return fcEnd();
+  var w=FC.q[0],fwd=FCDIR==='f',e=emo(w),lg=w.ko.length>14?' long':'';FC.flip=false;
+  var front=fwd?'<span class="fcw'+lg+'">'+esc(w.ko)+'</span>':'<span class="fcw ru">'+esc(w.ru)+'</span>';
+  var back='<span class="fcw'+lg+'">'+esc(w.ko)+'</span><span class="fcru">'+esc(w.ru)+'</span>'+(e?'<span class="fce">'+e+'</span>':'');
+  app.innerHTML='<div class="screen"><div class="lhead"><button class="x" id="back" aria-label="Закрыть">'+ICON.x+'</button><div class="pbar"><i style="width:'+(FC.done/FC.n*100)+'%"></i></div><span class="fcc">'+FC.done+' / '+FC.n+'</span></div>'+
+   '<div class="task fct"><p class="fct-t">'+esc(FC.title)+'</p><button class="fcard" id="card" aria-label="Перевернуть карточку"><span class="face front">'+front+'<small class="fch">нажми, чтобы перевернуть</small></span><span class="face backf">'+back+'<small class="fch">'+esc(w.l)+'</small></span></button>'+
+   '<div class="fcspk" id="fspk"'+(fwd?'':' style="visibility:hidden"')+'>'+spkBtn(sayText(w))+'</div></div></div>'+
+   '<div class="bottom"><div class="in" id="fin"><button class="main-btn" id="flip">Показать перевод</button></div></div>';
+  wireSpk();
+  document.getElementById('back').onclick=function(){FC=null;home()};
+  document.getElementById('card').onclick=fcFlip;document.getElementById('flip').onclick=fcFlip;
+  var c=document.getElementById('card'),x0=null;
+  c.addEventListener('touchstart',function(ev){x0=ev.touches[0].clientX},{passive:true});
+  c.addEventListener('touchend',function(ev){if(x0==null||!FC||!FC.flip)return;var dx=ev.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>70){ev.preventDefault();fcAns(dx>0)}});
+  if(fwd)setTimeout(function(){say(sayText(w))},250);
+}
+function fcFlip(){
+  if(!FC)return;var w=FC.q[0],c=document.getElementById('card');
+  FC.flip=!FC.flip;c.classList.toggle('on',FC.flip);
+  if(!FC.flip)return;
+  document.getElementById('fspk').style.visibility='visible';
+  if(FCDIR!=='f')say(sayText(w));
+  var fin=document.getElementById('fin');
+  if(!document.getElementById('yes')){fin.classList.add('bzbtns');
+    fin.innerHTML='<button class="main-btn no" id="no">Не знаю</button><button class="main-btn" id="yes">Знаю</button>';
+    document.getElementById('no').onclick=function(){fcAns(false)};document.getElementById('yes').onclick=function(){fcAns(true)};document.getElementById('yes').focus()}
+}
+function fcAns(ok){
+  var w=FC.q.shift(),k=key(w),firstTime=!FC.seen[k];FC.seen[k]=1;
+  if(firstTime){mark(w,ok);save()}
+  if(ok){FC.done++;if(firstTime)FC.first++}
+  else{FC.again++;if(FC.miss.indexOf(w)<0)FC.miss.push(w);FC.q.splice(Math.min(FC.q.length,3+rnd(3)),0,w)}
+  fcShow();
+}
+function fcEnd(){
+  view='result';var xp=Math.max(2,Math.round(FC.n/3));S.xp+=xp;var d=today();S.days[d]=(S.days[d]||0)+xp;save();
+  var miss=FC.miss.slice(),title=FC.title;
+  app.innerHTML='<div class="screen"><div class="result"><div class="big">'+LN('잘했어요!','Жарайсың!','Well done!')+'</div><h2>Колода пройдена</h2>'+
+   '<div class="rgrid"><div class="rbox"><b style="color:var(--celadon)">+'+xp+'</b><small>XP</small></div><div class="rbox"><b style="color:var(--celadon)">'+FC.first+'/'+FC.n+'</b><small>знал сразу</small></div><div class="rbox"><b>'+FC.again+'</b><small>повторов</small></div></div>'+
+   (miss.length?'<div class="mist"><b>Эти слова пришлось повторить</b>'+miss.map(function(w){return '<div><span class="ko">'+esc(w.ko)+'</span><span>'+esc(w.ru)+'</span></div>'}).join('')+'</div>':'<p style="margin:0;color:var(--muted)">Все карточки с первого раза!</p>')+
+   '</div></div><div class="bottom"><div class="in">'+(miss.length?'<button class="main-btn" id="again">Повторить эти слова ('+miss.length+')</button>':'')+'<button class="main-btn'+(miss.length?' ghost':'')+'" id="go">К карточкам</button></div></div>';
+  FC=null;
+  if(miss.length)document.getElementById('again').onclick=function(){startFc(shuffle(miss),title+' · повтор')};
+  document.getElementById('go').onclick=function(){TAB='f';home()};
+}
+document.addEventListener('keydown',function(e){if(view!=='fc'||!FC)return;
+  if(e.key===' '||(e.key==='Enter'&&!FC.flip)){e.preventDefault();if(!FC.flip)fcFlip();return}
+  if(FC.flip){if(e.key==='ArrowLeft'||e.key==='1')fcAns(false);if(e.key==='ArrowRight'||e.key==='2')fcAns(true)}});
+
+/* ---------- extra grammar items (all languages) ---------- */
+(function(){
+var GX={
+ko:{
+g1:{fill:[['우리 아빠는 경찰___.','Мой папа — полицейский.','이에요',['이에요','예요']],['이 사람은 제 친구___.','Этот человек — мой друг.','예요',['이에요','예요']],['여기는 병원___?','Здесь больница?','이에요',['이에요','예요']]],
+ tr:[['Это мой телефон.','이것은 제 핸드폰이에요',['핸드폰예요','저는'],[]],['Я геодезист.','저는 측량사예요',['측량사이에요','저를'],[]]]},
+g2:{fill:[['이것___ 책이에요.','Это книга.','은',['은','는','도']],['아빠___ 의사예요. 엄마도 의사예요.','Папа — врач. Мама тоже врач.','는',['은','는','도']],['친구가 학생이에요. 저___ 학생이에요.','Друг — студент. Я тоже студент.','도',['은','는','도']]],
+ tr:[['Я тоже геодезист.','저도 측량사예요',['측량사이에요','저를'],[]],['Старший брат — инженер.','형은 엔지니어예요',['형는','엔지니어이에요'],[]]]},
+g3:{fill:[['시간___ 없어요.','Нет времени.','이',['이','가','을']],['머리___ 아파요.','Голова болит.','가',['이','가','를']],['___ 측량사예요?','Кто геодезист?','누가',['누가','누구가','누구를']]],
+ tr:[['У меня есть машина.','저는 차가 있어요',['차를','차는'],[]],['Есть вопрос.','질문이 있어요',['질문가','질문을'],[]]]},
+g4:{fill:[['저는 한국어___ 배워요.','Я учу корейский.','를',['을','를']],['아빠는 빵___ 사요.','Папа покупает хлеб.','을',['을','를']],['저는 도면___ 그려요.','Я черчу чертёж.','을',['을','를']]],
+ tr:[['Я смотрю телевизор.','저는 텔레비전을 봐요',['텔레비전를','저를'],[]],['Друг ест кимчи.','친구는 김치를 먹어요',['김치을','친구를'],[]]]},
+g5:{fill:[['회사___ 일해요.','Работаю в компании.','에서',['에','에서']],['주말___ 산에 가요.','На выходных иду в горы.','에',['에','에서']],['왼쪽___ 가세요.','Идите налево.','으로',['으로','로','에서']]],
+ tr:[['Я работаю на стройке.','저는 공사장에서 일해요',['공사장에','저를'],[]],['Я из России.','러시아에서 왔어요',['러시아에','러시아로'],[]]]},
+g6:{fill:[['저는 아침에 빵을 ___.','Утром я ем хлеб.','먹어요',['먹어요','먹아요','먹요']],['한국어를 ___.','Учу корейский (занимаюсь).','공부해요',['공부해요','공부하어요','공부하요']],['친구가 집에 ___.','Друг приходит домой.','와요',['와요','오아요','오요']]],
+ tr:[['Я пишу письмо.','편지를 써요',['쓰어요','편지가'],[]],['Я работаю в компании.','회사에서 일해요',['일하어요','회사에'],[]]]},
+g7:{fill:[['어제 책을 ___.','Вчера читал книгу.','읽었어요',['읽었어요','읽았어요','읽어요']],['작년에 한국에 ___.','В прошлом году ездил в Корею.','갔어요',['갔어요','가았어요','갈 거예요']],['어제 커피를 많이 ___.','Вчера выпил много кофе.','마셨어요',['마셨어요','마시었어요','마셔요']]],
+ tr:[['Вчера я работал.','어제 일했어요',['일해요','일하었어요'],[]],['Я встретил друга в кафе.','카페에서 친구를 만났어요',['만나요','카페에'],[]]]},
+g8:{fill:[['저는 수영을 ___ 해요.','Я не умею плавать.','못',['안','못']],['저는 술을 ___ 마셔요.','Я не пью алкоголь (не хочу).','안',['안','못']],['아파서 회사에 ___ 갔어요.','Заболел и не смог пойти на работу.','못',['안','못']]],
+ tr:[['Я плохо говорю по-корейски.','한국어를 잘 못 해요',['안','잘해요'],[]],['Сегодня я не работаю.','오늘은 일을 안 해요',['못','일해요'],[]]]},
+g9:{fill:[['여기에서 ___.','Подождите здесь.','기다리세요',['기다리세요','기다리으세요','기다려세요']],['안전모를 ___.','Наденьте каску.','쓰세요',['쓰세요','쓰으세요','써세요']],['음악을 ___.','Послушайте музыку.','들으세요',['들으세요','듣으세요','들세요']]],
+ tr:[['Будьте осторожны.','조심하세요',['조심해세요','조심하으세요'],[]],['Садитесь здесь.','여기에 앉으세요',['앉세요','여기에서'],[]]]},
+g10:{fill:[['커피___ 빵을 샀어요.','Купил кофе и хлеб.','하고',['하고','과','을']],['책상___ 의자 (письменно)','Стол и стул','과',['과','와']],['안전모___ 장갑 (письменно)','Каска и перчатки','와',['과','와']]],
+ tr:[['Я и друг — студенты.','저하고 친구는 학생이에요',['저는','친구도'],[]],['Я купил яблоки и бананы.','사과하고 바나나를 샀어요',['사과를','바나나가'],[]]]},
+g11:{fill:[['다음 주에 한국에 ___.','На следующей неделе поеду в Корею.','갈 거예요',['갈 거예요','가을 거예요','갔어요']],['내일 책을 ___.','Завтра буду читать книгу.','읽을 거예요',['읽을 거예요','읽 거예요','읽었어요']],['아마 그 영화가 ___.','Наверное, этот фильм интересный.','재미있을 거예요',['재미있을 거예요','재미있 거예요','재미있었어요']]],
+ tr:[['Завтра я буду работать.','내일 일할 거예요',['일했어요','일하을'],[]],['Наверное, завтра будет холодно.','아마 내일 추울 거예요',['춥을','추웠어요'],[]]]},
+g12:{fill:[['우리 커피 ___?','Выпьем кофе?','마실까요',['마실까요','마시을까요','마셨어요']],['저는 비빔밥을 ___.','Я буду пибимпап.','먹을래요',['먹을래요','먹래요','먹었어요']],['주말에 같이 산에 ___?','Пойдём в выходные в горы?','갈까요',['갈까요','가을까요','갔어요']]],
+ tr:[['Поедим вместе?','같이 먹을까요',['먹까요','먹었어요'],[]],['Что будешь пить?','뭐 마실래요',['마시을래요','마셨어요'],['뭘 마실래요']]]},
+g13:{fill:[['주말에 ___ 싶어요.','На выходных хочу отдохнуть.','쉬고',['쉬고','쉬어','쉬서']],['저는 한국 음식을 먹___ 싶어요.','Хочу есть корейскую еду.','고',['고','어','러']],['어제 영화를 보___ 싶었어요.','Вчера хотел посмотреть фильм.','고',['고','어','러']]],
+ tr:[['Я хочу поехать в Корею.','한국에 가고 싶어요',['가서','가요'],[]],['Я хочу спать.','자고 싶어요',['자서','자요'],[]]]},
+g14:{fill:[['우체국에 편지를 보내___ 가요.','Иду на почту отправить письмо.','러',['러','으러','고']],['식당에 밥을 먹___ 가요.','Иду в столовую поесть.','으러',['으러','러','고']],['공사장에 측량하___ 가요.','Еду на стройку делать съёмку.','러',['러','으러','서']]],
+ tr:[['Иду в кафе выпить кофе.','커피를 마시러 카페에 가요',['마시으러','카페에서'],[]],['Я пришёл встретиться с другом.','친구를 만나러 왔어요',['만나서','친구가'],[]]]},
+g15:{fill:[['배가 아파___ 병원에 갔어요.','Болел живот, поэтому пошёл в больницу.','서',['서','고']],['저는 밥을 먹___ 회사에 가요.','Я ем и иду на работу.','고',['고','서']],['날씨가 좋아___ 산책했어요.','Погода хорошая, поэтому погулял.','서',['서','고']]],
+ tr:[['Я заболел, поэтому не пошёл.','아파서 안 갔어요',['아프고','가서'],[]],['Мой друг умный и добрый.','제 친구는 똑똑하고 친절해요',['똑똑해서','친구가'],[]]]},
+g16:{fill:[['공사장에서는 안전모를 ___ 돼요.','На стройке надо носить каску.','써야',['써야','써도','쓰면']],['여기에서 사진을 ___ 돼요?','Здесь можно фотографировать?','찍어도',['찍어도','찍어야','찍으면']],['공사장에서 담배를 피우___ 안 돼요.','На стройке курить нельзя.','면',['면','고','어도']]],
+ tr:[['Можно войти?','들어가도 돼요',['들어가야','들어가면'],[]],['Не опаздывайте.','늦지 마세요',['늦으면','늦어도'],[]]]},
+g17:{fill:[['내년에 한국어를 배우___ 해요.','В следующем году собираюсь учить корейский.','려고',['려고','으려고','러']],['이 옷을 입어 ___.','Примерьте эту одежду.','보세요',['보세요','주세요','싶어요']],['사진 좀 찍어 ___.','Сфотографируйте, пожалуйста.','주세요',['주세요','보세요','려고']]],
+ tr:[['Я собираюсь купить машину.','차를 사려고 해요',['사러','사으려고'],[]],['Помогите мне, пожалуйста.','도와 주세요',['보세요','도우려고'],[]]]},
+g18:{fill:[['제가 도와 ___.','Я помогу.','줄게요',['줄게요','줄까요','줬어요']],['내일 일찍 ___.','Завтра приду рано (обещаю).','올게요',['올게요','오을게요','올까요']],['제가 도면을 ___.','Я начерчу чертёж.','그릴게요',['그릴게요','그리을게요','그렸어요']]],
+ tr:[['Я позвоню завтра.','내일 전화할게요',['전화할까요','전화했어요'],[]],['Я подожду здесь.','여기에서 기다릴게요',['기다릴까요','여기에'],[]]]},
+g19:{fill:[['저는 회사에서 ___.','Я работаю в компании.','일합니다',['일합니다','일하습니다','일해습니다']],['이것은 무엇___?','Что это?','입니까',['입니까','입니다','습니까']],['책을 ___.','Я читаю книгу.','읽습니다',['읽습니다','읽니다','읽읍니다']]],
+ tr:[['Я геодезист.','저는 측량사입니다',['측량사습니다','저를'],[]],['Где вы живёте?','어디에 삽니까',['살습니까','삽니다'],[]]]},
+g20:{fill:[['아버지께서 신문을 ___.','Отец читает газету.','읽으세요',['읽으세요','읽어요','읽세요']],['할머니, 맛있게 ___.','Бабушка, приятного аппетита.','드세요',['드세요','먹으세요','먹어요']],['선생님, ___이 어떻게 되세요?','Учитель, как вас зовут?','성함',['성함','이름','나이']]],
+ tr:[['Дедушка спит.','할아버지께서 주무세요',['자요','할아버지가'],[]],['Сколько лет вашему отцу?','아버지 연세가 어떻게 되세요',['나이가','돼요'],[]]]},
+g21:{fill:[['일하___ 전에 커피를 마셔요.','Перед работой пью кофе.','기',['기','는','고']],['수업이 끝___ 후에 친구를 만나요.','После урока встречаюсь с другом.','난',['난','나기','나서']],['자___ 전에 이를 닦아요.','Перед сном чищу зубы.','기',['기','은','고']]],
+ tr:[['Перед едой мою руки.','먹기 전에 손을 씻어요',['먹은','후에'],[]],['После работы иду домой.','일한 후에 집에 가요',['일하기','전에'],[]]]}
+},
+kz:{
+k1:{fill:[['Үстелде дәптер___ бар.','На столе тетради.','лер',['лар','лер']],['Ол ауыл___ тұрады.','Он живёт в ауле.','да',['да','де']],['Біз көл___ барамыз.','Мы едем на озеро.','ге',['ге','ға']]],
+ tr:[['Они учителя.','Олар мұғалімдер',['мұғалімдар','Ол'],[]],['Он в ауле.','Ол ауылда',['ауылде','Олар'],[]]]},
+k2:{fill:[['Мен геодезист___.','Я геодезист.','пін',['пін','мін','бін']],['Біз студент___.','Мы студенты.','піз',['піз','міз','біз']],['Сен жас___.','Ты молодой.','сың',['сың','сің','мын']]],
+ tr:[['Я геодезист.','Мен геодезистпін',['геодезистмін','Сен'],[]],['Вы учитель?','Сіз мұғалімсіз бе',['мұғалімсің','ма'],[]]]},
+k3:{fill:[['Көше___ үлкен.','Улицы большие.','лер',['лер','лар','дер']],['Бала___ ойнап жатыр.','Дети играют.','лар',['лар','дар','тар']],['Дос___ келді.','Друзья пришли.','тар',['тар','дар','лар']]],
+ tr:[['Где тетради?','Дәптерлер қайда',['Дәптерлар','кім'],[]],['Студенты в школе.','Студенттер мектепте',['Студентлер','мектепта'],[]]]},
+k4:{fill:[['Бұл көл ___?','Это озеро?','ме',['ме','ма','бе']],['Бұл қыз ___?','Это девушка?','ба',['ба','ма','па']],['Сіз ___ келдіңіз?','Откуда вы приехали?','қайдан',['қайдан','қайда','кім']]],
+ tr:[['Это озеро?','Бұл көл ме',['ма','бе'],[]],['Кто это?','Бұл кім',['не','қайда'],[]]]},
+k5:{fill:[['Ол инженер ___.','Он не инженер.','емес',['емес','жоқ','емеспін']],['Бүгін уақыт ___.','Сегодня нет времени.','жоқ',['жоқ','емес','бар']],['Біз студент ___.','Мы не студенты.','емеспіз',['емеспіз','емеспін','жоқпыз']]],
+ tr:[['Он не учитель.','Ол мұғалім емес',['жоқ','емеспін'],[]],['У меня нет машины.','Менің көлігім жоқ',['емес','көлікім'],[]]]},
+k6:{fill:[['Менің дос___ дәрігер.','Мой друг — врач.','ым',['ым','ім','ы']],['Сенің үй___ үлкен.','Твой дом большой.','ің',['ің','ың','ім']],['Оның көлі___ жаңа.','Его машина новая.','гі',['гі','кі','гім']]],
+ tr:[['Мой друг — инженер.','Менің досым инженер',['досі','досың'],[]],['Его мама — учитель.','Оның анасы мұғалім',['анам','анасі'],[]]]},
+k7:{fill:[['Үйде нан ___ ма?','Дома есть хлеб?','бар',['бар','жоқ','емес']],['Менде сұрақ ___.','У меня есть вопрос.','бар',['бар','барым','емес']],['Сенің ___ бар ма?','У тебя есть машина?','көлігің',['көлігің','көлігім','көлік']]],
+ tr:[['У меня есть вопрос.','Менде сұрақ бар',['жоқ','Мен'],[]],['У тебя есть старший брат?','Сенің ағаң бар ма',['ағам','ме'],[]]]},
+k8:{fill:[['Біздің үйде ___ бөлме бар.','В нашем доме три комнаты.','үш',['үш','үшінші','үштер']],['Сабақ сағат ___ басталады.','Урок начинается в девять.','тоғызда',['тоғызда','тоғыз','тоғызға']],['Бұл ___ қабат.','Это пятый этаж.','бесінші',['бесінші','бес','бесте']]],
+ tr:[['У меня три старших брата.','Менің үш ағам бар',['ағаларым','үшінші'],[]],['Это стоит две тысячи тенге.','Бұл екі мың теңге тұрады',['екінші','теңгелер'],[]]]},
+k9:{fill:[['Мен базар___ барамын.','Я иду на рынок.','ға',['ға','ге','қа']],['Ол әуежай___ барады.','Он едет в аэропорт.','ға',['ға','ге','қа']],['Біз көл___ барамыз.','Мы едем на озеро.','ге',['ге','ке','ға']]],
+ tr:[['Я иду в магазин.','Мен дүкенге барамын',['дүкенке','барады'],[]],['Мы едем в аэропорт.','Біз әуежайға барамыз',['әуежайге','барамын'],[]]]},
+k10:{fill:[['Ол аурухана___ жұмыс істейді.','Он работает в больнице.','да',['да','де','та']],['Мен құрылыс___ жұмыс істеймін.','Я работаю на стройке.','та',['та','да','те']],['Кітап сөмке___.','Книга в сумке.','де',['де','да','те']]],
+ tr:[['Я работаю на стройке.','Мен құрылыста жұмыс істеймін',['құрылысда','істейді'],[]],['Он в больнице.','Ол ауруханада',['ауруханаға','Олар'],[]]]},
+k11:{fill:[['Мен жұмыс___ келдім.','Я пришёл с работы.','тан',['тан','дан','нан']],['Ол Алматы___ келді.','Он приехал из Алматы.','дан',['дан','нан','тан']],['Біз дүкен___ келдік.','Мы пришли из магазина.','нен',['нен','ден','тен']]],
+ tr:[['Мы приехали из Астаны.','Біз Астанадан келдік',['Астанаға','келдім'],[]],['Он пришёл из школы.','Ол мектептен келді',['мектепден','келдім'],[]]]},
+k12:{fill:[['Мен кітап___ оқыдым.','Я прочитал книгу.','ты',['ты','ды','ны']],['Ол су___ ішті.','Он выпил воду.','ды',['ды','ны','ты']],['Біз сызба___ тексердік.','Мы проверили чертёж.','ны',['ны','ды','ты']]],
+ tr:[['Я прочитал книгу.','Мен кітапты оқыдым',['кітапды','оқыды'],[]],['Мы проверили чертёж.','Біз сызбаны тексердік',['сызбады','тексердім'],[]]]},
+k13:{fill:[['Бұл досым___ көлігі.','Это машина моего друга.','ның',['ның','дың','тың']],['Үй___ терезесі үлкен.','Окно дома большое.','дің',['дің','нің','тің']],['Құрылыс___ шебері келді.','Пришёл мастер стройки.','тың',['тың','дың','ның']]],
+ tr:[['Это дом моего друга.','Бұл досымның үйі',['досымдың','үйім'],[]],['Окно дома открыто.','Үйдің терезесі ашық',['Үйнің','терезем'],[]]]},
+k14:{fill:[['Мен жұмысқа автобус___ барамын.','Я езжу на работу на автобусе.','пен',['пен','бен','мен']],['Ол досы___ келді.','Он пришёл с другом.','мен',['мен','бен','пен']],['Мен қалам___ жазамын.','Я пишу ручкой.','мен',['мен','бен','пен']]],
+ tr:[['Я пришёл с мамой.','Мен анаммен келдім',['анамбен','келді'],[]],['Он едет на поезде.','Ол пойызбен барады',['пойызмен','барамын'],[]]]},
+k15:{fill:[['Көлік үйдің ___.','Машина перед домом.','алдында',['алдында','ішінде','астында']],['Саябақ мектептің ___.','Парк за школой.','артында',['артында','үстінде','ішінде']],['Қалам кітаптың ___.','Ручка на книге.','үстінде',['үстінде','ішінде','артында']]],
+ tr:[['Машина перед домом.','Көлік үйдің алдында',['алдыда','үйде'],[]],['Ключ в сумке.','Кілт сөмкенің ішінде',['ішіде','сөмкеде'],[]]]},
+k16:{fill:[['Мен күнде жұмыс істей___.','Я каждый день работаю.','мін',['мін','мын','сің']],['Олар қазақша сөйлей___.','Они говорят по-казахски.','ді',['ді','міз','сің']],['Сен қайда тұр___?','Где ты живёшь?','асың',['асың','амын','ады']]],
+ tr:[['Я работаю каждый день.','Мен күнде жұмыс істеймін',['істейді','күні'],[]],['Где ты живёшь?','Сен қайда тұрасың',['тұрамын','қайдан'],[]]]},
+k17:{fill:[['Ертең кел___.','Приходите завтра.','іңіз',['іңіз','ыңыз','ңіз']],['Дулыға ки___.','Наденьте каску.','іңіз',['іңіз','ыңыз','ңіз']],['Абай бол___!','Будьте осторожны!','ыңыз',['ыңыз','іңіз','ңыз']]],
+ tr:[['Приходите завтра.','Ертең келіңіз',['келыңыз','кеше'],[]],['Наденьте каску.','Дулыға киіңіз',['кийіңіз','Дулығаға'],[]]]},
+k18:{fill:[['Мен жұмыс істе___ жатырмын.','Я сейчас работаю.','п',['п','іп','ып']],['Ол кітап оқ___ отыр.','Он сидит и читает книгу.','ып',['ып','іп','п']],['Біз тамақ ішіп жатыр___.','Мы сейчас едим.','мыз',['мыз','мын','сың']]],
+ tr:[['Я сейчас работаю.','Мен жұмыс істеп жатырмын',['істейп','жатырсың'],[]],['Мама готовит еду.','Анам тамақ пісіріп жатыр',['пісіреп','жатырмын'],[]]]},
+k19:{fill:[['Мен кеше жұмыс істе___.','Вчера я работал.','дім',['дім','дым','тім']],['Олар кеше кел___.','Они пришли вчера.','ді',['ді','дік','ті']],['Сен оны көр___ бе?','Ты его видел?','дің',['дің','дім','дік']]],
+ tr:[['Вчера я работал.','Кеше мен жұмыс істедім',['істеймін','істеді'],[]],['Мы пришли домой.','Біз үйге келдік',['келдім','үйде'],[]]]},
+k20:{fill:[['Мен демал___ келеді.','Я хочу отдохнуть.','ғым',['ғым','гім','қым']],['Сіз не іш___ келеді?','Что вы хотите выпить?','кіңіз',['кіңіз','гіңіз','кім']],['Ол Астанаға бар___ келеді.','Он хочет поехать в Астану.','ғысы',['ғысы','ғым','ғың']]],
+ tr:[['Я хочу отдохнуть.','Мен демалғым келеді',['демалгім','келемін'],[]],['Я хочу пить воду.','Мен су ішкім келеді',['ішгім','келемін'],[]]]}
+},
+en:{
+e1:{fill:[['Have you ever ___ to Almaty?','Ты когда-нибудь был в Алматы?','been',['been','went','was']],["I ___ my keys. I can't open the door.",'Я потерял ключи. Не могу открыть дверь.','have lost',['have lost','lost','had lost']],['We ___ the survey in 2023.','Мы провели съёмку в 2023 году.','did',['did','have done','have did']]],
+ tr:[['Я ещё не закончил.','I have not finished yet',['did','finish'],[]],['Я видел этот фильм два раза.','I have seen this film twice',['saw','did'],[]]],
+ err:[['Я уже отправил чертежи.','I have already sent the drawings.','sent','send']]},
+e2:{fill:[['We ___ on this project since March.','Мы работаем над этим проектом с марта.','have been working',['have been working','are working','work']],['She is tired because she ___ all day.','Она устала: работала весь день.','has been working',['has been working','is working','works']],['I ___ this car for five years.','У меня эта машина пять лет.','have had',['have had','have been having','have']]],
+ tr:[['Я учу английский три года.','I have been learning English for three years',['since','am'],[]],['Как долго ты здесь живёшь?','How long have you been living here',['are','do'],[]]],
+ err:[['Я жду тебя с утра.','I have been waiting for you since morning.','since','for']]},
+e3:{fill:[['By the time I got there, the shop ___.','Когда я добрался, магазин уже закрылся.','had closed',['had closed','closed','has closed']],['We ___ dinner when the guests arrived.','Мы ужинали, когда пришли гости.','were having',['were having','had','have had']],['She ___ the door, took her bag and left.','Она закрыла дверь, взяла сумку и ушла.','closed',['closed','was closing','had closed']]],
+ tr:[['Когда я пришёл, они уже поели.','When I came they had already eaten',['have','ate'],[]],['Шёл дождь, когда мы начали съёмку.','It was raining when we started the survey',['rained','had'],[]]],
+ err:[['Пока я ехал домой, позвонил начальник.','While I was driving home, my boss called.','driving','drove']]},
+e4:{fill:[['We ___ meeting the client at ten tomorrow.','Мы встречаемся с клиентом завтра в десять.','are',['are','will','going']],["I'm tired. I think I ___ go to bed.",'Я устал. Пожалуй, пойду спать.','will',['will','am going','would']],['By next week we ___ finished the foundation.','К следующей неделе мы закончим фундамент.','will have',['will have','will be','have']]],
+ tr:[['Завтра в восемь я буду работать на объекте.','At eight tomorrow I will be working on site',['work','am'],[]],['Я собираюсь купить новую машину.','I am going to buy a new car',['will','buying'],[]]],
+ err:[['Я встречаюсь с инспектором в пятницу.','I am meeting the inspector on Friday.','meeting','meet']]},
+e5:{fill:[['If you ___ the button, the machine will stop.','Если нажмёшь кнопку, станок остановится.','press',['press','will press','pressed']],["I'll wait here until you ___.",'Я подожду здесь, пока ты не вернёшься.','come back',['come back','will come back','came back']],["___ you hurry, you'll be late.",'Если не поторопишься, опоздаешь.','Unless',['Unless','If','When']]],
+ tr:[['Если пойдёт дождь, мы остановим работу.','If it rains we will stop work',['will','rained'],[]],['Я позвоню, как только приеду.','I will call as soon as I arrive',['arrived','when'],[]]],
+ err:[['Если он позвонит, я тебе скажу.','If he calls, I will tell you.','calls','call']]},
+e6:{fill:[['If I ___ more time, I would learn Chinese.','Будь у меня больше времени, я бы учил китайский.','had',['had','have','would have']],['If he had asked me, I ___ him.','Если бы он попросил, я бы ему помог.','would have helped',['would have helped','would help','had helped']],['She would be happier if she ___ closer to work.','Она была бы счастливее, если бы жила ближе к работе.','lived',['lived','lives','would live']]],
+ tr:[['Если бы я знал ответ, я бы сказал тебе.','If I knew the answer I would tell you',['know','will'],[]],['Мы бы опоздали, если бы поехали на автобусе.','We would have been late if we had taken the bus',['took','will'],[]]],
+ err:[['Если бы у меня была машина, я бы тебя подвёз.','If I had a car, I would give you a lift.','would','will']]},
+e7:{fill:[['I wish I ___ speak Korean.','Жаль, что я не говорю по-корейски.','could',['could','can','would']],['I wish I ___ more English at school.','Жаль, что я мало учил английский в школе.','had learned',['had learned','learned','learn']],["I wish you ___ always late.",'Жаль, что ты всегда опаздываешь.',"weren't",["weren't","aren't","won't be"]]],
+ tr:[['Жаль, что у меня нет машины.','I wish I had a car',['have','would'],[]],['Жаль, что я не пошёл с вами.','I wish I had gone with you',['went','have'],[]]],
+ err:[['Жаль, что я не живу ближе.','I wish I lived closer.','lived','live']]},
+e8:{fill:[['The drawings ___ by the engineer yesterday.','Чертежи вчера проверил инженер.','were checked',['were checked','checked','have checked']],['A new bridge ___ built here now.','Здесь сейчас строят новый мост.','is being',['is being','is been','was']],['All workers ___ to wear hard hats.','Все рабочие обязаны носить каски.','are required',['are required','require','are requiring']]],
+ tr:[['Отчёт отправят завтра.','The report will be sent tomorrow',['send','sended'],[]],['Котлован засыпали на прошлой неделе.','The pit was backfilled last week',['backfill','is'],[]]],
+ err:[['Здание построили в 1985 году.','The building was built in 1985.','built','build']]},
+e9:{fill:[["I'm going to have my car ___ tomorrow.",'Завтра мне починят машину.','fixed',['fixed','fix','fixing']],['He ___ his wallet stolen on the train.','У него в поезде украли кошелёк.','had',['had','was','got to']],['You should get your eyes ___.','Тебе стоит проверить зрение.','tested',['tested','test','testing']]],
+ tr:[['Я подстригся вчера.','I had my hair cut yesterday',['cutted','was'],[]],['Нам надо отремонтировать крышу.','We need to have the roof repaired',['repair','be'],[]]],
+ err:[['Мне починили часы.','I had my watch repaired.','repaired','repair']]},
+e10:{fill:[['She said that she ___ tired.','Она сказала, что устала.','was',['was','is','be']],['He asked me if I ___ help.','Он спросил, нужна ли мне помощь.','needed',['needed','need','did need']],['They told us they ___ already left.','Они сказали нам, что уже ушли.','had',['had','have','has']]],
+ tr:[['Она сказала, что позвонит позже.','She said she would call later',['will','told'],[]],['Он спросил, где я живу.','He asked where I lived',['do','did'],[]]],
+ err:[['Она сказала мне, что занята.','She told me she was busy.','told','said']]},
+e11:{fill:[['He promised ___ on time.','Он пообещал прийти вовремя.','to come',['to come','coming','come']],['She denied ___ the window.','Она отрицала, что разбила окно.','breaking',['breaking','to break','break']],['The doctor advised him ___ smoking.','Врач посоветовал ему бросить курить.','to give up',['to give up','giving up','give up']]],
+ tr:[['Он предложил мне помочь.','He offered to help me',['helping','suggested'],[]],['Она напомнила мне позвонить.','She reminded me to call',['calling','remembered'],[]]],
+ err:[['Он извинился за опоздание.','He apologised for being late.','for','of']]},
+e12:{fill:[['I avoid ___ in the rush hour.','Я стараюсь не ездить в час пик.','driving',['driving','to drive','drive']],['We managed ___ the work before the rain.','Нам удалось закончить работу до дождя.','to finish',['to finish','finishing','finish']],['Remember ___ the door when you leave.','Не забудь запереть дверь, когда уходишь.','to lock',['to lock','locking','lock']]],
+ tr:[['Я решил учить английский.','I decided to learn English',['learning','study'],[]],['Он не против подождать.','He does not mind waiting',['to','wait'],[]]],
+ err:[['Мне нравится работать на улице.','I enjoy working outdoors.','working','work']]},
+e13:{fill:[['When I was a child, I ___ live in a village.','В детстве я жил в деревне.','used to',['used to','am used to','use to']],["I'm not used to ___ so early.",'Я не привык вставать так рано.','getting up',['getting up','get up','got up']],["You'll soon get used to ___ the new software.",'Ты скоро привыкнешь к новой программе.','using',['using','use','used']]],
+ tr:[['Раньше я работал в Москве.','I used to work in Moscow',['use','working'],[]],['Я привык к холоду.','I am used to the cold',['use','get'],[]]],
+ err:[['Я привык работать на холоде.','I am used to working in the cold.','working','work']]},
+e14:{fill:[['You ___ be hungry after such a long day.','Ты, наверное, голоден после такого долгого дня.','must',['must',"can't",'should']],["She isn't answering. She ___ be asleep.",'Она не отвечает. Может, спит.','might',['might','must not','can']],["He ___ have taken the keys. They were in my pocket!",'Не мог он взять ключи: они были у меня в кармане!',"can't",["can't",'must','should']]],
+ tr:[['Наверное, он забыл.','He must have forgotten',['forgot','can'],[]],['Мне надо было проверить отметки.','I should have checked the levels',['check','must'],[]]],
+ err:[['Возможно, она опоздала на поезд.','She might have missed the train.','missed','miss']]},
+e15:{fill:[["That's the engineer ___ checked the drawings.",'Это тот инженер, который проверял чертежи.','who',['who','which','whose']],['The tool ___ I bought last week is broken.','Инструмент, который я купил на прошлой неделе, сломан.','that',['that','who','where']],['This is the site ___ we worked last year.','Это объект, где мы работали в прошлом году.','where',['where','which','who']]],
+ tr:[['Это человек, чья машина сломалась.','This is the man whose car broke down',['who','which'],[]],['Это офис, где я работаю.','This is the office where I work',['which','who'],[]]],
+ err:[['Мой брат, который живёт в Казани, — геодезист.','My brother, who lives in Kazan, is a surveyor.','who','which']]},
+e16:{fill:[['___ being tired, he finished the report.','Несмотря на усталость, он закончил отчёт.','Despite',['Despite','Although','However']],['I left early ___ I could catch the train.','Я ушёл рано, чтобы успеть на поезд.','so that',['so that','in order to','despite']],['It was sunny. ___, it was very cold.','Было солнечно. Однако было очень холодно.','However',['However','Although','Despite']]],
+ tr:[['Хотя было поздно, мы продолжили работу.','Although it was late we continued working',['Despite','However'],[]],['Я встал рано, чтобы закончить съёмку.','I got up early to finish the survey',['for','finishing'],[]]],
+ err:[['Несмотря на дождь, мы закончили работу.','Despite the rain, we finished the work.','Despite','Although']]},
+e17:{fill:[['The sooner we start, ___ we finish.','Чем раньше начнём, тем раньше закончим.','the sooner',['the sooner','sooner','the soonest']],['It was ___ hot that we stopped work.','Было так жарко, что мы остановили работу.','so',['so','such','such a']],['This road is ___ longer than the other one.','Эта дорога намного длиннее той.','far',['far','very','more']]],
+ tr:[['Это был такой длинный день.','It was such a long day',['so','very'],[]],['Чем больше практикуешься, тем лучше.','The more you practise the better',['most','good'],[]]],
+ err:[['Тест был намного легче.','The test was much easier.','much','very']]},
+e18:{fill:[['Do you know where the site office ___?','Вы не знаете, где прорабская?','is',['is','does','are']],['Could you tell me how much it ___?','Не подскажете, сколько это стоит?','costs',['costs','does cost','cost']],["You're a surveyor, ___ you?",'Ты ведь геодезист?',"aren't",["aren't","don't","isn't"]]],
+ tr:[['Вы не знаете, во сколько начинается совещание?','Do you know what time the meeting starts',['does','start'],[]],['Интересно, сколько это стоит.','I wonder how much it costs',['does','cost'],[]]],
+ err:[['Он ведь не придёт?',"He isn't coming, is he?",'is',"isn't"]]},
+e19:{fill:[['There are ___ mistakes in the report, but not many.','В отчёте есть несколько ошибок, но немного.','a few',['a few','a little','few']],['___ of the two answers is correct.','Ни один из двух ответов не верен.','Neither',['Neither','None','Either']],['We have very ___ money left.','У нас осталось очень мало денег.','little',['little','few','a few']]],
+ tr:[['У меня есть немного времени.','I have a little time',['few','much'],[]],['Никто из рабочих не опоздал.','None of the workers was late',['No','Nobody'],[]]],
+ err:[['У меня мало друзей.','I have few friends.','few','little']]},
+e20:{fill:[["You'd better ___ late again.",'Тебе лучше больше не опаздывать.','not be',['not be',"don't be",'not to be']],["I'd rather ___ at home tonight.",'Сегодня я бы лучше остался дома.','stay',['stay','to stay','staying']],["We'd better ___ before the rain starts.",'Нам лучше уйти до начала дождя.','leave',['leave','to leave','leaving']]],
+ tr:[['Тебе лучше надеть каску.','You had better wear a hard hat',['to','would'],[]],['Я бы лучше поработал завтра.','I would rather work tomorrow',['to','better'],[]]],
+ err:[["Тебе лучше ему позвонить.","You'd better call him.",'call','to call']]}
+}};
+[[G,GX.ko],[KG,GX.kz],[EG,GX.en]].forEach(function(p){p[0].forEach(function(g){var x=p[1][g.id];if(!x)return;['fill','tr','err','form'].forEach(function(k){if(x[k]){g[k]=g[k]||[];x[k].forEach(function(it){g[k].push(it)})}})})});
+})();
+
+/* ---------- new grammar tasks ---------- */
+function gSents(g){var a=g.ex.map(function(e){return [e[0],e[1]]});g.fill.forEach(function(f){a.push([f[0].replace('___',f[2]),f[1]])});return a}
+function tGtf(T){
+  var f=T.f;
+  if(T.ok==null){T.ok=Math.random()<.5;var wr=f[3].filter(function(o){return o!==f[2]});T.opt=T.ok||!wr.length?f[2]:pick(wr);if(T.opt===f[2])T.ok=true}
+  var full=f[0].replace('___',f[2]),parts=f[0].split('___');
+  shell('<p class="q-title">Предложение правильное?</p><div class="sent ko">'+esc(parts[0])+'<b class="hlw">'+esc(T.opt)+'</b>'+esc(parts[1]||'')+'</div><p class="sru">'+esc(f[1])+'</p><div class="opts g2"><button class="opt tfb" data-i="0">Верно</button><button class="opt tfb" data-i="1">Неверно</button></div>');
+  wireChoice([true,false],function(o){return o===T.ok},function(ok){say(full);if(!ok)L.mist.push({ko:full,ru:f[1]});
+    feedback(ok,ok?'':esc(full),T.ok?'':'Нужно «'+esc(f[2])+'», а не «'+esc(T.opt)+'»')});
+}
+function tGex(T){
+  var g=T.g,s=T.s,rev=T.rev;
+  if(!T.opts){var others=gSents(g).filter(function(x){return x[1]!==s[1]&&x[0]!==s[0]}),ds=shuffle(others).slice(0,3);
+    if(ds.length<3){var more=[];G.forEach(function(h){if(h!==g)gSents(h).forEach(function(x){if(x[1]!==s[1])more.push(x)})});ds=ds.concat(shuffle(more).slice(0,3-ds.length))}
+    T.opts=shuffle([s].concat(ds))}
+  var opts=T.opts;
+  if(!rev){shell('<p class="q-title">Что значит это предложение?</p><div class="prompt"><span class="sent ko">'+esc(s[0])+'</span>'+spkBtn(s[0])+'</div><div class="opts">'+opts.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+esc(o[1])+'</button>'}).join('')+'</div>');setTimeout(function(){say(s[0])},250)}
+  else shell('<p class="q-title">'+LN('Выбери перевод на корейский','Выбери перевод на казахский','Выбери перевод на английский')+'</p><div class="prompt"><span class="word ru">'+esc(s[1])+'</span></div><div class="opts">'+opts.map(function(o,i){return '<button class="opt ko ls" data-i="'+i+'">'+esc(o[0])+'</button>'}).join('')+'</div>');
+  wireChoice(opts,function(o){return o===s},function(ok){say(s[0]);if(!ok)L.mist.push({ko:s[0],ru:s[1]});feedback(ok,ok?'':esc(rev?s[0]:s[1]),rev?'':esc(s[0])+' — '+esc(s[1]))},rev?function(o){say(o[0])}:null);
+}
+
 /* ---------- language switch ---------- */
 var KO_DATA={V:V,G:G,TX:TX,EMO:EMO,NEAR:NEAR,DIALOGS:DIALOGS,MP:MP};
 function applyData(){
